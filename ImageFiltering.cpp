@@ -30,29 +30,32 @@ char image3Vertical_3x3[50] = "./Image3Vertical_3x3.raw";
 char image3Horizontal_5x5[50] = "./Image3Horizontal_5x5.raw";
 char image3Vertical_5x5[50] = "./Image3Vertical_5x5.raw";
 
-void read(int** image, char* fileName, size_t rows, size_t cols) {
+void ReadImageFile(int** image, char* fileName, size_t rows, size_t cols) {
     FILE* inputFile = fopen(fileName, "rb");
 
     if (inputFile) {
+        std::cout << "Reading " << fileName << " into image array" << std::endl;
         for (size_t i = 0; i < rows; i++) {
             for (size_t j = 0; j < cols; j++) {
                 image[i][j] = fgetc(inputFile);
             }
         }
         fclose(inputFile);
+        std::cout << "Completed read " << std::endl;
     }
 }
 
-void write(int** image, char* fileName, size_t rows, size_t cols) {
+void WriteImageFile(int** image, char* fileName, size_t rows, size_t cols) {
     FILE* outputFile = fopen(fileName, "wb");
 
+    std::cout << "Writing to " << fileName << " from image array" << std::endl;
     for (size_t i = 0; i < rows; i++) {
         for (size_t j = 0; j < cols; j++) {
             fputc(image[i][j], outputFile);
         }
     }
-
     fclose(outputFile);
+    std::cout << "Completed Write" << std::endl;
 }
 
 int** CreateTwoDimArray(size_t rows, size_t cols) {
@@ -156,22 +159,28 @@ void DetectEdges(char* inputFileName, char* h_3x3OutputFileName, char* v_3x3Outp
     int** image_horizontal = CreateTwoDimArray(rows, cols);
     int** image_vertical = CreateTwoDimArray(rows, cols);
 
-    read(image, inputFileName, rows, cols);
+    ReadImageFile(image, inputFileName, rows, cols);
     SetEdgesToZeros(image, rows, cols);
 
+    std::cout << "Applying 3x3 Sobel filters to " << inputFileName << std::endl;
     ApplySobelFilter(image, image_horizontal, image_vertical, h_filter3x3, v_filter3x3, rows, cols, smallFilterSize);
     NormalizeImage(image_horizontal, rows, cols);
     NormalizeImage(image_vertical, rows, cols);
+    std::cout << "Normalized horizontal and vertical gradient images" << std::endl;
 
-    write(image_horizontal, h_3x3OutputFileName, rows, cols);
-    write(image_vertical, v_3x3OutputFileName, rows, cols);
+    WriteImageFile(image_horizontal, h_3x3OutputFileName, rows, cols);
+    WriteImageFile(image_vertical, v_3x3OutputFileName, rows, cols);
 
+    std::cout << "Applying 5x5 Sobel filters to " << inputFileName << std::endl;
     ApplySobelFilter(image, image_horizontal, image_vertical, h_filter5x5, v_filter5x5, rows, cols, largeFilterSize);
     NormalizeImage(image_horizontal, rows, cols);
     NormalizeImage(image_vertical, rows, cols);
+    std::cout << "Normalized horizontal and vertical gradient images" << std::endl;
 
-    write(image_horizontal, h_5x5OutputFileName, rows, cols);
-    write(image_vertical, v_5x5OutputFileName, rows, cols);
+
+    WriteImageFile(image_horizontal, h_5x5OutputFileName, rows, cols);
+    WriteImageFile(image_vertical, v_5x5OutputFileName, rows, cols);
+    std::cout << std::endl;
 }
 
 int main()
