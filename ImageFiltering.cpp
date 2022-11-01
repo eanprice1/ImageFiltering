@@ -14,8 +14,8 @@ char image1Vertical_3x3[50] = "./Image1Vertical_3x3.raw";
 char image1Horizontal_5x5[50] = "./Image1Horizontal_5x5.raw";
 char image1Vertical_5x5[50] = "./Image1Vertical_5x5.raw";
 
-const size_t image2Rows = 750;
-const size_t image2Cols = 500;
+const size_t image2Rows = 500;
+const size_t image2Cols = 750;
 char image2FileName[50] = "./Image2.raw";
 char image2Horizontal_3x3[50] = "./Image2Horizontal_3x3.raw";
 char image2Vertical_3x3[50] = "./Image2Vertical_3x3.raw";
